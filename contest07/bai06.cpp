@@ -4,28 +4,32 @@
 
 using namespace std;
 
-bool check(string &s){
+bool isOperator(char x){
+    if(x=='+' || x=='-' || x=='*' || x=='/')
+        return true;
+    return false;
+}
+void check(string &s){
     stack<char> mincy;
     for (int i = 0; i < s.size(); i++)
     {
+        if(s[i]=='(' || isOperator(s[i])) mincy.push(s[i]);
         if(s[i]==')'){
-            char x = mincy.top();
-            mincy.pop();
-            bool ok = true;
-            while(x!='('){
-                if(x=='+' || x=='-' || x=='*' || x=='/')
-                    ok = false;
-                x = mincy.top();
-                mincy.pop();
-                
+            if(mincy.top()=='('){
+                cout << "Yes" << endl;
+                return;
             }
-            if(ok==true)
-                return true;
+            else{
+                while(mincy.top()!='(' && !mincy.empty()){
+                    mincy.pop();
+                }
+                if(!mincy.empty())
+                    mincy.pop();
+            }
         }
-        else
-            mincy.push(s[i]);
-    }
-    return false;
+   }
+   cout << "No" << endl;
+
 }
 
 int main(){
@@ -35,10 +39,6 @@ int main(){
     while(t--){
         string s;
         getline(cin, s);
-        if(check(s)==true)
-            cout << "YES";
-        else
-            cout << "NO";
-        cout << endl;
+        check(s);
     }
 }
